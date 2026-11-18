@@ -5,49 +5,40 @@ Aluna.bya es una plataforma web desarrollada como proyecto académico de grado p
 
 La plataforma busca facilitar la administración de productos, clientes y pedidos, así como mejorar la experiencia de compra de los usuarios mediante un catálogo digital.
 
+## Información académica
+- **Institución:** Universidad Nacional Abierta y a Distancia (UNAD).
+- **Escuela:** ECBTI.
+- **Programa:** Ingeniería Multimedia.
+- **Curso:** Proyecto de grado.
+- **Proyecto:** Desarrollo de una plataforma web para la gestión comercial de pequeños emprendimientos de Tauramena.
+- **Emprendimiento piloto:** Aluna.bya.
+- **Integrante:** Jehidy Alexandra Daza Rodríguez.
 
 
 ## Objetivo
 Desarrollar una plataforma web que permita gestionar los procesos comerciales de Aluna.bya, facilitando la consulta de productos, la realización de pedidos y la administración de la información del emprendimiento.
 
-
-
 ## Funcionalidades principales
 
 - Catálogo digital de productos.
-
 - Consulta de productos y precios.
-
 - Personalización de productos.
-
 - Carrito de compras.
-
 - Registro e inicio de sesión de usuarios.
-
-- Gestión de pedidos de clientes.
-
+-Gestión de pedidos de clientes.
 - Reporte de pagos mediante Nequi.
-
 - Panel de administración.
-
 - Consulta y actualización del estado de los pedidos.
-
 - Gestión y validación de la información de los pedidos.
 
   
 ## Tecnologías utilizadas
 - PHP.
-
 - HTML.
-
 - CSS.
-
 - JavaScript.
-
 - MariaDB.
-
 - XAMPP.
-
 - Git y GitHub.
 
 
@@ -91,15 +82,10 @@ El archivo `conexion.php` contiene la configuración de conexión a la base de d
 Se implementaron medidas de seguridad como:
 
 - Validación de datos en el servidor.
-
 - Consultas preparadas para interactuar con la base de datos.
-
 - Control de acceso al panel administrativo.
-
 - Validación de tokens CSRF.
-
 - Validación de identificadores y estados de pedidos.
-
 - Verificación de productos, precios y personalizaciones desde la base de datos.
 
 
@@ -107,27 +93,4 @@ Se implementaron medidas de seguridad como:
 
 [Plataforma web Aluna.bya en GitHub](https://github.com/Jehidy-Daza/Plataforma-web-aluna-bya)
 
-## Información académica
-
-- \*\*Institución:\*\* Universidad Nacional Abierta y a Distancia (UNAD).
-
-- \*\*Escuela:\*\* ECBTI.
-
-- \*\*Programa:\*\* Ingeniería de Sistemas.
-
-- \*\*Curso:\*\* Proyecto de grado.
-
-- \*\*Proyecto:\*\* Desarrollo de una plataforma web para la gestión comercial de pequeños emprendimientos de Tauramena.
-
-- \*\*Emprendimiento piloto:\*\* Aluna.bya.
-  
-- \*\*Integrantes:\*\* Jehidy Alexandra Daza Rodriguez 
-
-
-
-\---
-
-
-
-Proyecto desarrollado con fines académicos.
 
