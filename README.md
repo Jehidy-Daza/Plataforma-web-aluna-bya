@@ -1,32 +1,20 @@
-\# Plataforma web Aluna.bya
+# Plataforma web Aluna.bya
 
-
-
-\## Descripción del proyecto
-
-
-
+## Descripción del proyecto
 Aluna.bya es una plataforma web desarrollada como proyecto académico de grado para apoyar la gestión comercial de un pequeño emprendimiento de repostería y postres ubicado en Tauramena, Casanare, Colombia.
-
-
 
 La plataforma busca facilitar la administración de productos, clientes y pedidos, así como mejorar la experiencia de compra de los usuarios mediante un catálogo digital.
 
 
 
-\## Objetivo
-
-
-
+## Objetivo
 Desarrollar una plataforma web que permita gestionar los procesos comerciales de Aluna.bya, facilitando la consulta de productos, la realización de pedidos y la administración de la información del emprendimiento.
 
 
 
-\## Funcionalidades principales
+## Funcionalidades principales
 
-
-
-\- Catálogo digital de productos.
+- Catálogo digital de productos.
 
 \- Consulta de productos y precios.
 
