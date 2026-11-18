@@ -16,71 +16,53 @@ Desarrollar una plataforma web que permita gestionar los procesos comerciales de
 
 - Catálogo digital de productos.
 
-\- Consulta de productos y precios.
+- Consulta de productos y precios.
 
-\- Personalización de productos.
+- Personalización de productos.
 
-\- Carrito de compras.
+- Carrito de compras.
 
-\- Registro e inicio de sesión de usuarios.
+- Registro e inicio de sesión de usuarios.
 
-\- Gestión de pedidos de clientes.
+- Gestión de pedidos de clientes.
 
-\- Reporte de pagos mediante Nequi.
+- Reporte de pagos mediante Nequi.
 
-\- Panel de administración.
+- Panel de administración.
 
-\- Consulta y actualización del estado de los pedidos.
+- Consulta y actualización del estado de los pedidos.
 
-\- Gestión y validación de la información de los pedidos.
+- Gestión y validación de la información de los pedidos.
 
+  
+## Tecnologías utilizadas
+- PHP.
 
+- HTML.
 
-\## Tecnologías utilizadas
+- CSS.
 
+- JavaScript.
 
+- MariaDB.
 
-\- PHP.
+- XAMPP.
 
-\- HTML.
-
-\- CSS.
-
-\- JavaScript.
-
-\- MariaDB.
-
-\- XAMPP.
-
-\- Git y GitHub.
+- Git y GitHub.
 
 
+## Requisitos para ejecutar el proyecto
+- Sistema operativo Windows.
+- XAMPP instalado.
+- Servidor Apache.
+- MariaDB.
+- Navegador web.
+- Archivos del proyecto.
+- Copia de seguridad de la base de datos.
 
-\## Requisitos para ejecutar el proyecto
+## Instalación y configuración
 
-
-
-\- Sistema operativo Windows.
-
-\- XAMPP instalado.
-
-\- Servidor Apache.
-
-\- MariaDB.
-
-\- Navegador web.
-
-\- Archivos del proyecto.
-
-\- Copia de seguridad de la base de datos.
-
-
-
-\## Instalación y configuración
-
-
-
-1\. Instalar XAMPP en el equipo.
+1. Instalar XAMPP en el equipo.
 
 2\. Copiar la carpeta del proyecto `AlunaWeb` dentro de la carpeta `htdocs`.
 
