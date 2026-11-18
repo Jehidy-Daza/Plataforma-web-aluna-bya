@@ -64,21 +64,19 @@ Desarrollar una plataforma web que permita gestionar los procesos comerciales de
 
 1. Instalar XAMPP en el equipo.
 
-2\. Copiar la carpeta del proyecto `AlunaWeb` dentro de la carpeta `htdocs`.
+2. Copiar la carpeta del proyecto `AlunaWeb` dentro de la carpeta `htdocs`.
 
-3\. Iniciar los servicios Apache y MySQL desde el panel de XAMPP.
+3. Iniciar los servicios Apache y MySQL desde el panel de XAMPP.
 
-4\. Crear una base de datos llamada `alunabya`.
+4. Crear una base de datos llamada `alunabya`.
 
-5\. Importar la estructura y los datos de la base de datos.
+5. Importar la estructura y los datos de la base de datos.
 
-6\. Configurar el archivo local `conexion.php` con los datos de conexión correspondientes.
+6. Configurar el archivo local `conexion.php` con los datos de conexión correspondientes.
 
-7\. Abrir el navegador e ingresar a:
+7. Abrir el navegador e ingresar a:
 
-
-
-&#x20;  `http://localhost/AlunaWeb/`
+  http://localhost/AlunaWeb/
 
 
 
