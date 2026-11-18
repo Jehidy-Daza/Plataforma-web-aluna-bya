@@ -80,63 +80,48 @@ Desarrollar una plataforma web que permita gestionar los procesos comerciales de
 
 
 
-\## Base de datos
-
-
+## Base de datos
 
 El sistema utiliza MariaDB para almacenar la información relacionada con los productos, usuarios y pedidos.
 
-
-
 El archivo `conexion.php` contiene la configuración de conexión a la base de datos. Este archivo se utiliza localmente y no se incluye en el repositorio público por razones de seguridad.
 
-
-
-\## Seguridad
-
-
+## Seguridad
 
 Se implementaron medidas de seguridad como:
 
+- Validación de datos en el servidor.
+
+- Consultas preparadas para interactuar con la base de datos.
+
+- Control de acceso al panel administrativo.
+
+- Validación de tokens CSRF.
+
+- Validación de identificadores y estados de pedidos.
+
+- Verificación de productos, precios y personalizaciones desde la base de datos.
 
 
-\- Validación de datos en el servidor.
+## Repositorio
 
-\- Consultas preparadas para interactuar con la base de datos.
+[Plataforma web Aluna.bya en GitHub](https://github.com/Jehidy-Daza/Plataforma-web-aluna-bya)
 
-\- Control de acceso al panel administrativo.
+## Información académica
 
-\- Validación de tokens CSRF.
+- \*\*Institución:\*\* Universidad Nacional Abierta y a Distancia (UNAD).
 
-\- Validación de identificadores y estados de pedidos.
+- \*\*Escuela:\*\* ECBTI.
 
-\- Verificación de productos, precios y personalizaciones desde la base de datos.
+- \*\*Programa:\*\* Ingeniería de Sistemas.
 
+- \*\*Curso:\*\* Proyecto de grado.
 
+- \*\*Proyecto:\*\* Desarrollo de una plataforma web para la gestión comercial de pequeños emprendimientos de Tauramena.
 
-\## Repositorio
-
-
-
-\[Plataforma web Aluna.bya en GitHub](https://github.com/Jehidy-Daza/Plataforma-web-aluna-bya)
-
-
-
-\## Información académica
-
-
-
-\- \*\*Institución:\*\* Universidad Nacional Abierta y a Distancia (UNAD).
-
-\- \*\*Escuela:\*\* ECBTI.
-
-\- \*\*Programa:\*\* Ingeniería de Sistemas.
-
-\- \*\*Curso:\*\* Proyecto de grado.
-
-\- \*\*Proyecto:\*\* Desarrollo de una plataforma web para la gestión comercial de pequeños emprendimientos de Tauramena.
-
-\- \*\*Emprendimiento piloto:\*\* Aluna.bya.
+- \*\*Emprendimiento piloto:\*\* Aluna.bya.
+  
+- \*\*Integrantes:\*\* Jehidy Alexandra Daza Rodriguez 
 
 
 
