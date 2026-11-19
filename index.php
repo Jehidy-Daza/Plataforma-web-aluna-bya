@@ -2,63 +2,45 @@
 <?php
 session_start();
 
-$productos = [
-    [
-        "categoria" => " Donitas",
-        "items" => [
-            ["nombre" => "Caja sencilla", "precio" => 12000, "descripcion" => "6 mini donitas, 2 salsas y 3 toppings.", "imagen" => "Caja_Sencilla.jpeg"],
-            ["nombre" => "Caja especial", "precio" => 15000, "descripcion" => "6 mini donitas, 1 salsa y 2 toppings.", "imagen" => "Caja_Especial.jpeg"],
-            ["nombre" => "Vaso pequeño", "precio" => 14000, "descripcion" => "5 mini donitas con chocolate y toppings.", "imagen" => "Vaso_Mini.jpeg"],
-            ["nombre" => "Vaso grande", "precio" => 18000, "descripcion" => "8 mini donitas con chocolate y toppings.", "imagen" => "Vaso_Grande.jpeg"]
-        ]
-    ],
-    [
-        "categoria" => "Cuchareables",
-        "items" => [
-            ["nombre" => "Cuchareable mini", "precio" => 8000, "descripcion" => "Elige tu sabor favorito.", "imagen" => ""],
-            ["nombre" => "Cuchareable mediano", "precio" => 12000, "descripcion" => "Elige tu sabor favorito.", "imagen" => ""],
-            ["nombre" => "Cuchareable grande", "precio" => 16000, "descripcion" => "Elige tu sabor favorito.", "imagen" => ""]
-        ]
-    ],
-    [
-        "categoria" => "Pavés",
-        "items" => [
-            ["nombre" => "Pavé 10 onzas", "precio" => 13000, "descripcion" => "Presentación de 10 onzas. Elige tu sabor favorito.", "imagen" => "Pavespej.jpeg"]
-        ]
-    ],
-    [
-        "categoria" => "Obleas cuchareables",
-        "items" => [
-            ["nombre" => "Oblea mini", "precio" => 10000, "descripcion" => "Oblea triturada, crema de la casa, 1 fruta y 1 topping.", "imagen" => ""],
-            ["nombre" => "Oblea mediana", "precio" => 15000, "descripcion" => "Oblea triturada, crema de la casa, 2 frutas y 2 toppings.", "imagen" => ""],
-            ["nombre" => "Oblea grande", "precio" => 25000, "descripcion" => "Oblea triturada, crema de la casa, 3 frutas y toppings.", "imagen" => ""]
-        ]
-    ],
-    [
-        "categoria" => "Frutas con crema",
-        "items" => [
-            ["nombre" => "Frutas con crema mini", "precio" => 9000, "descripcion" => "Galleta triturada, crema de la casa, 1 fruta, 1 salsa y 1 topping.", "imagen" => ""],
-            ["nombre" => "Frutas con crema mediana", "precio" => 14000, "descripcion" => "Galleta triturada, Ducales, crema de la casa, 2 frutas, 1 salsa y 2 toppings.", "imagen" => "Frutas_Mediano.jpeg"],
-            ["nombre" => "Frutas con crema grande", "precio" => 17000, "descripcion" => "Galleta triturada, crema de la casa, 2 frutas, 2 salsas, queso y 2 toppings.", "imagen" => "Frutas_Grandes.jpeg"]
-        ]
-    ],
-    [
-        "categoria" => "Choco bowls",
-        "items" => [
-            ["nombre" => "Choco bowl mini", "precio" => 11000, "descripcion" => "Crema de la casa, 1 fruta y chocolate.", "imagen" => ""],
-            ["nombre" => "Choco bowl mediano", "precio" => 15000, "descripcion" => "Crema de la casa, 2 frutas y chocolate.", "imagen" => ""],
-            ["nombre" => "Choco bowl grande", "precio" => 25000, "descripcion" => "Crema de la casa, 3 frutas y chocolate.", "imagen" => ""]
-        ]
-    ],
-    [
-        "categoria" => "Waffles",
-        "items" => [
-            ["nombre" => "Waffle individual", "precio" => 7000, "descripcion" => "Incluye 1 salsa y 1 topping.", "imagen" => ""],
-            ["nombre" => "Waffle amor", "precio" => 26000, "descripcion" => "Incluye 4 toppings, helado y salsa.", "imagen" => ""],
-            ["nombre" => "Waffle saludable", "precio" => 20000, "descripcion" => "Preparado con pollo desmechado y lechuga.", "imagen" => ""]
-        ]
-    ]
-];
+require_once "conexion.php";
+
+// Identificar si el cliente regresa del inicio de sesión.
+$recuperarCarrito = isset($_GET["recuperar_carrito"]);
+
+// Consultar productos activos desde MariaDB.
+$consulta = "SELECT nombre, categoria, descripcion, precio, imagen
+             FROM productos
+             WHERE activo = 1
+             ORDER BY id_producto ASC";
+
+$resultado = $conexion->query($consulta);
+
+if (!$resultado) {
+    die("Error al consultar los productos: " . $conexion->error);
+}
+
+// Organizar productos por categoría.
+$productos = [];
+
+while ($fila = $resultado->fetch_assoc()) {
+    $categoria = $fila["categoria"];
+
+    if (!isset($productos[$categoria])) {
+        $productos[$categoria] = [
+            "categoria" => $categoria,
+            "items" => []
+        ];
+    }
+
+    $productos[$categoria]["items"][] = [
+        "nombre" => $fila["nombre"],
+        "precio" => (float) $fila["precio"],
+        "descripcion" => $fila["descripcion"],
+        "imagen" => $fila["imagen"]
+    ];
+}
+
+$productos = array_values($productos);
 
 function obtenerOpciones($nombre) {
     $saboresCuchareables = ["Fresa", "Mango", "Chocorramo", "Gansito", "Leche Klim", "Oreo"];
@@ -642,7 +624,28 @@ footer {
 </footer>
 
 <script>
+
+// Recuperar el carrito guardado en el navegador.
 let carrito = [];
+
+try {
+    const carritoGuardado = sessionStorage.getItem("carritoAluna");
+
+    if (carritoGuardado) {
+        carrito = JSON.parse(carritoGuardado);
+
+        if (!Array.isArray(carrito)) {
+            carrito = [];
+        }
+    }
+} catch (error) {
+    carrito = [];
+}
+
+// Guardar el carrito cada vez que cambie.
+function guardarCarrito() {
+    sessionStorage.setItem("carritoAluna", JSON.stringify(carrito));
+}
 
 function abrirCarrito() {
     document.getElementById("carrito").classList.add("abierto");
@@ -678,6 +681,7 @@ function agregarProducto(boton) {
         personalizaciones: personalizaciones
     });
 
+    guardarCarrito();
     actualizarCarrito();
     abrirCarrito();
 }
@@ -689,7 +693,7 @@ function actualizarCarrito() {
     let total = 0;
 
     carrito.forEach((producto, indice) => {
-        total += producto.precio;
+        total += Number(producto.precio);
 
         const div = document.createElement("div");
         div.className = "item-carrito";
@@ -706,7 +710,7 @@ function actualizarCarrito() {
 
         const precio = document.createElement("p");
         precio.textContent =
-            "$" + producto.precio.toLocaleString("es-CO") + " COP";
+            "$" + Number(producto.precio).toLocaleString("es-CO") + " COP";
         div.appendChild(precio);
 
         const eliminar = document.createElement("button");
@@ -725,11 +729,13 @@ function actualizarCarrito() {
 
 function eliminarProducto(indice) {
     carrito.splice(indice, 1);
+    guardarCarrito();
     actualizarCarrito();
 }
 
 function vaciarCarrito() {
     carrito = [];
+    guardarCarrito();
     actualizarCarrito();
 }
 
@@ -741,8 +747,10 @@ async function continuarCompra() {
 
     <?php if (!isset($_SESSION["id_cliente"])): ?>
 
-        alert("Para continuar con tu compra, primero debes iniciar sesión o registrarte.");
-        window.location.href = "login.php";
+        // Guardar el carrito antes de enviar al cliente a iniciar sesión.
+        guardarCarrito();
+
+        window.location.href = "login.php?destino=catalogo";
         return;
 
     <?php endif; ?>
@@ -773,7 +781,9 @@ async function continuarCompra() {
             return;
         }
 
+        // Limpiar el carrito después de registrar correctamente el pedido.
         carrito = [];
+        sessionStorage.removeItem("carritoAluna");
         actualizarCarrito();
 
         window.location.href = "pago.php?id=" + resultado.id_pedido;
@@ -783,10 +793,20 @@ async function continuarCompra() {
         console.error(error);
     }
 }
+
+// Mostrar los productos recuperados al cargar la página.
+actualizarCarrito();
+
+<?php if ($recuperarCarrito): ?>
+    if (carrito.length > 0) {
+        abrirCarrito();
+        alert("¡Bienvenido de nuevo! Recuperamos los productos de tu carrito.");
+    }
+<?php endif; ?>
+
 </script>
 
 </body>
 </html>
-
 
 

@@ -29,10 +29,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["correo_cliente"] = $cliente["correo"];
             $_SESSION["rol"] = $cliente["rol"];
 
+            // Recuperar la página de destino después del inicio de sesión.
+            $destino = $_SESSION["destino_login"] ?? "";
+
+            unset($_SESSION["destino_login"]);
+
             $consulta->close();
 
             if ($cliente["rol"] === "admin") {
                 header("Location: admin.php");
+            } elseif ($destino === "catalogo") {
+                header("Location: index.php?recuperar_carrito=1");
             } else {
                 header("Location: mi_cuenta.php");
             }
@@ -149,3 +156,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 </body>
 </html>
+

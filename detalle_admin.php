@@ -13,10 +13,19 @@ if (
     exit;
 }
 
-// Obtener el número del pedido
+// Generar un token de seguridad para proteger el formulario (CSRF)
+if (empty($_SESSION["csrf_token"])) {
+    $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
+}
+
+// Obtener y validar el número del pedido
 $id_pedido = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
 
-if (!$id_pedido) {
+if (
+    $id_pedido === false ||
+    $id_pedido === null ||
+    $id_pedido <= 0
+) {
     die("Número de pedido no válido.");
 }
 
@@ -32,8 +41,10 @@ $sql = "SELECT p.id_pedido, p.fecha_pedido, p.total,
 $consulta = $conexion->prepare($sql);
 $consulta->bind_param("i", $id_pedido);
 $consulta->execute();
+
 $resultado = $consulta->get_result();
 $pedido = $resultado->fetch_assoc();
+
 $consulta->close();
 
 if (!$pedido) {
@@ -49,8 +60,10 @@ $sql_detalle = "SELECT nombre_producto, cantidad,
 $consulta_detalle = $conexion->prepare($sql_detalle);
 $consulta_detalle->bind_param("i", $id_pedido);
 $consulta_detalle->execute();
+
 $productos = $consulta_detalle->get_result();
 
+// Función para proteger la salida de datos HTML
 function e($valor) {
     return htmlspecialchars((string)$valor, ENT_QUOTES, "UTF-8");
 }
@@ -58,6 +71,7 @@ function e($valor) {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -177,7 +191,9 @@ select {
 <div class="contenedor">
 
     <div class="tarjeta">
+
         <h1>Aluna Bya 💙</h1>
+
         <h2>Detalle del pedido #<?= (int)$pedido["id_pedido"] ?></h2>
 
         <p><strong>Cliente:</strong> <?= e($pedido["nombre"]) ?></p>
@@ -186,24 +202,31 @@ select {
         <p><strong>Fecha:</strong> <?= e($pedido["fecha_pedido"]) ?></p>
         <p><strong>Método de pago:</strong> <?= e($pedido["metodo_pago"]) ?></p>
 
-        <p><strong>Estado del pedido:</strong>
+        <p>
+            <strong>Estado del pedido:</strong>
             <?= e($pedido["estado"]) ?>
         </p>
 
-        <p><strong>Estado del pago:</strong>
+        <p>
+            <strong>Estado del pago:</strong>
             <?= e($pedido["estado_pago"]) ?>
         </p>
 
-        <p><strong>Referencia:</strong>
+        <p>
+            <strong>Referencia:</strong>
             <?= e($pedido["referencia_pago"] ?: "Sin reportar") ?>
         </p>
+
     </div>
 
     <div class="tarjeta">
+
         <h2>Productos comprados</h2>
 
         <div class="tabla">
+
             <table>
+
                 <thead>
                     <tr>
                         <th>Producto y personalización</th>
@@ -214,44 +237,88 @@ select {
                 </thead>
 
                 <tbody>
+
                 <?php if ($productos->num_rows > 0): ?>
+
                     <?php while ($producto = $productos->fetch_assoc()): ?>
+
                     <tr>
+
                         <td><?= e($producto["nombre_producto"]) ?></td>
+
                         <td><?= (int)$producto["cantidad"] ?></td>
+
                         <td>
-                            $<?= number_format((float)$producto["precio_unitario"], 0, ",", ".") ?>
+                            $<?= number_format(
+                                (float)$producto["precio_unitario"],
+                                0,
+                                ",",
+                                "."
+                            ) ?>
                         </td>
+
                         <td>
-                            $<?= number_format((float)$producto["subtotal"], 0, ",", ".") ?>
+                            $<?= number_format(
+                                (float)$producto["subtotal"],
+                                0,
+                                ",",
+                                "."
+                            ) ?>
                         </td>
+
                     </tr>
+
                     <?php endwhile; ?>
+
                 <?php else: ?>
+
                     <tr>
-                        <td colspan="4">Este pedido no tiene productos registrados.</td>
+                        <td colspan="4">
+                            Este pedido no tiene productos registrados.
+                        </td>
                     </tr>
+
                 <?php endif; ?>
+
                 </tbody>
+
             </table>
+
         </div>
 
         <p class="total">
-            Total: $<?= number_format((float)$pedido["total"], 0, ",", ".") ?> COP
+            Total: $<?= number_format(
+                (float)$pedido["total"],
+                0,
+                ",",
+                "."
+            ) ?> COP
         </p>
+
     </div>
 
     <div class="tarjeta">
+
         <h2>Administrar pedido</h2>
 
         <?php if (isset($_GET["actualizado"])): ?>
+
             <div class="mensaje">
                 ¡Los cambios del pedido se guardaron correctamente!
             </div>
+
         <?php endif; ?>
 
         <form action="actualizar_pedido.php" method="POST">
 
+            <!-- Token de seguridad CSRF -->
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="<?= e($_SESSION["csrf_token"]) ?>"
+            >
+
+            <!-- Identificador del pedido -->
             <input
                 type="hidden"
                 name="id_pedido"
@@ -261,20 +328,49 @@ select {
             <h3>Estado del pedido</h3>
 
             <select name="estado" required>
-                <option value="pendiente" <?= $pedido["estado"] === "pendiente" ? "selected" : "" ?>>Pendiente</option>
-                <option value="confirmado" <?= $pedido["estado"] === "confirmado" ? "selected" : "" ?>>Confirmado</option>
-                <option value="en_preparacion" <?= $pedido["estado"] === "en_preparacion" ? "selected" : "" ?>>En preparación</option>
-                <option value="listo" <?= $pedido["estado"] === "listo" ? "selected" : "" ?>>Listo</option>
-                <option value="entregado" <?= $pedido["estado"] === "entregado" ? "selected" : "" ?>>Entregado</option>
-                <option value="cancelado" <?= $pedido["estado"] === "cancelado" ? "selected" : "" ?>>Cancelado</option>
+
+                <option value="pendiente" <?= $pedido["estado"] === "pendiente" ? "selected" : "" ?>>
+                    Pendiente
+                </option>
+
+                <option value="confirmado" <?= $pedido["estado"] === "confirmado" ? "selected" : "" ?>>
+                    Confirmado
+                </option>
+
+                <option value="en_preparacion" <?= $pedido["estado"] === "en_preparacion" ? "selected" : "" ?>>
+                    En preparación
+                </option>
+
+                <option value="listo" <?= $pedido["estado"] === "listo" ? "selected" : "" ?>>
+                    Listo
+                </option>
+
+                <option value="entregado" <?= $pedido["estado"] === "entregado" ? "selected" : "" ?>>
+                    Entregado
+                </option>
+
+                <option value="cancelado" <?= $pedido["estado"] === "cancelado" ? "selected" : "" ?>>
+                    Cancelado
+                </option>
+
             </select>
 
             <h3>Estado del pago</h3>
 
             <select name="estado_pago" required>
-                <option value="pendiente" <?= $pedido["estado_pago"] === "pendiente" ? "selected" : "" ?>>Pendiente</option>
-                <option value="reportado" <?= $pedido["estado_pago"] === "reportado" ? "selected" : "" ?>>Reportado</option>
-                <option value="verificado" <?= $pedido["estado_pago"] === "verificado" ? "selected" : "" ?>>Verificado</option>
+
+                <option value="pendiente" <?= $pedido["estado_pago"] === "pendiente" ? "selected" : "" ?>>
+                    Pendiente
+                </option>
+
+                <option value="reportado" <?= $pedido["estado_pago"] === "reportado" ? "selected" : "" ?>>
+                    Reportado
+                </option>
+
+                <option value="verificado" <?= $pedido["estado_pago"] === "verificado" ? "selected" : "" ?>>
+                    Verificado
+                </option>
+
             </select>
 
             <p class="nota">
@@ -287,6 +383,7 @@ select {
             </button>
 
         </form>
+
     </div>
 
     <a href="admin.php" class="boton">Volver al panel</a>
@@ -296,3 +393,6 @@ select {
 </body>
 </html>
 
+<?php
+$consulta_detalle->close();
+?>
